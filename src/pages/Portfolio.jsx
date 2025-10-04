@@ -1,94 +1,136 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
 import { db } from "../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "./Loading";
 
-export default function Portfolio() {
-  const { user, loading } = useAuth();
+export default function Portfolio({ subdomain }) {
   const [userData, setUserData] = useState(null);
+  const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!subdomain) return;
 
-    const fetchUserData = async () => {
+    const fetchPortfolioData = async () => {
       try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+        // Check if subdomain exists
+        const subRef = doc(db, "subdomains", subdomain.toLowerCase());
+        const subSnap = await getDoc(subRef);
 
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());
+        if (!subSnap.exists()) {
+          setNotFound(true);
+          setLoading(false);
+          return;
+        }
+
+        const { uid } = subSnap.data();
+
+        // Fetch the user data for uid associated with found subdomain
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setUserData(userSnap.data());
+          setNotFound(false);
         } else {
-          setUserData(null);
+          setNotFound(true);
         }
       } catch (err) {
-        console.error("Error fetching user data:", err);
+        console.error("Error fetching portfolio data:", err);
+        setNotFound(true);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchUserData();
-  }, [user]);
+    fetchPortfolioData();
+  }, [subdomain]);
 
-  if (loading || !userData) return <Loading />;
+  if (loading) return <Loading />;
+  if (notFound) return <div className="p-8 text-center text-gray-500">Portfolio not found.</div>;
+
+  const user = userData;
 
   return (
     <div className="container mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold">{userData.firstName} {userData.lastName}</h1>
-      <p><strong>Location:</strong> {userData.location}</p>
-      <p><strong>Role:</strong> {userData.currentRole}</p>
-      <p><strong>Bio:</strong> {userData.bio}</p>
-      <p><strong>Contact Email:</strong> {userData.contactEmail}</p>
-      <p><strong>Contact Phone:</strong> {userData.contactPhone}</p>
-      
-      <div>
-        <strong>Links:</strong>
-        <ul>
-          {userData.links.map((link, i) => (
-            <li key={i}>
-              {link.platform}: <a href={link.url} target="_blank" rel="noopener noreferrer">{link.url}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <h1 className="text-2xl font-bold">{user.firstName} {user.lastName}</h1>
+      <p><strong>Location:</strong> {user.location}</p>
+      <p><strong>Role:</strong> {user.currentRole}</p>
+      <p><strong>Bio:</strong> {user.bio}</p>
+      <p><strong>Contact Email:</strong> {user.contactEmail}</p>
+      <p><strong>Contact Phone:</strong> {user.contactPhone}</p>
 
-      <div>
-        <strong>Skills:</strong>
-        <ul>
-          {userData.skills.map((skill, i) => (
-            <li key={i}>{skill.type} - {skill.name} (Level {skill.level})</li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <strong>Experiences:</strong>
-        <ul>
-          {userData.experiences.map((exp, i) => (
-            <li key={i}>
-              {exp.position} at {exp.companyName} ({exp.startDate} - {exp.endDate || "Present"})
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <strong>Education:</strong>
-        <ul>
-          {userData.education.map((edu, i) => (
-            <li key={i}>
-              {edu.schoolName} ({edu.startDate} - {edu.endDate})
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <strong>Resume:</strong> <a href={userData.resume} target="_blank" rel="noopener noreferrer">{userData.resume}</a>
-      </div>
-
-      {userData.pfp && (
+      {user.links?.length > 0 && (
         <div>
-          <img src={userData.pfp} alt="Profile Picture" className="w-32 h-32 rounded-full" />
+          <strong>Links:</strong>
+          <ul>
+            {user.links.map((link, i) => (
+              <li key={i}>
+                {link.platform}:{" "}
+                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  {link.url}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {user.skills?.length > 0 && (
+        <div>
+          <strong>Skills:</strong>
+          <ul>
+            {user.skills.map((skill, i) => (
+              <li key={i}>
+                {skill.type} - {skill.name} (Level {skill.level})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {user.experiences?.length > 0 && (
+        <div>
+          <strong>Experiences:</strong>
+          <ul>
+            {user.experiences.map((exp, i) => (
+              <li key={i}>
+                {exp.position} at {exp.companyName} ({exp.startDate} - {exp.endDate || "Present"})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {user.education?.length > 0 && (
+        <div>
+          <strong>Education:</strong>
+          <ul>
+            {user.education.map((edu, i) => (
+              <li key={i}>
+                {edu.schoolName} ({edu.startDate} - {edu.endDate})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {user.resume && (
+        <div>
+          <strong>Resume:</strong>{" "}
+          <a href={user.resume} target="_blank" rel="noopener noreferrer">
+            {user.resume}
+          </a>
+        </div>
+      )}
+
+      {user.pfp && (
+        <div>
+          <img
+            src={user.pfp}
+            alt="Profile Picture"
+            className="w-32 h-32 rounded-full"
+          />
         </div>
       )}
     </div>

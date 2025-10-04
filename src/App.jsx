@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react"
 import Home from "./pages/Home";
-import Loading from "./pages/Loading";
-import Navbar from "./components/Navbar";
 import 'primeicons/primeicons.css';
+import Portfolio from "./pages/Portfolio";
 
 function App() {
-
   const [subdomain, setSubdomain] = useState(null);
 
   useEffect(() => {
@@ -14,23 +12,14 @@ function App() {
     if (parts.length > 2) {
       const sub = parts[0];
       setSubdomain(sub);
-      //fetchTemplate(sub).then(template => setTemplate(template));
     }
   }, []);
 
   if (!subdomain) {
-    return (
-      <>
-        <Home />
-      </>
-    )
+    return <Home />
   }
 
-  if (!userConfig) {
-    return <Loading />
-  }
-
-  return <Portfolio template={template} />
+  return <Portfolio subdomain={subdomain} />
 }
 
 export default App

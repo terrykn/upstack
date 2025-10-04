@@ -5,15 +5,19 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 const signInWithGoogle = async (navigate) => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
+    const user = result?.user;
+
+    if (!user || !user.uid) {
+      throw new Error("No user data returned from Google sign-in.");
+    }
 
     const userDocRef = doc(db, "users", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
 
-    const docSnap = await getDoc(userDocRef);
-    if (!docSnap.exists()) {
+    if (!userDocSnap.exists()) {
       await setDoc(userDocRef, {
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: "",
+        lastName: "",
         location: "",
         contactEmail: user.email || "",
         contactPhone: "",
@@ -25,6 +29,7 @@ const signInWithGoogle = async (navigate) => {
         experiences: [],
         education: [],
         pfp: "",
+        subdomain: user.uid,
         layout: {
           pageLayout: "single",
           navLayout: "top",
@@ -40,11 +45,18 @@ const signInWithGoogle = async (navigate) => {
           skillsLayout: "chips",
           contactsLayout: "icons",
           showEmailForm: true,
-          domain: `${user.uid}.upstack.cv`,
           favicon: "",
           footerLayout: "minimal",
         },
       });
+
+      const subdomainRef = doc(db, "subdomains", user.uid);
+      await setDoc(subdomainRef, {
+        subdomain: user.uid,
+        uid: user.uid,
+      });
+
+      console.log(`Created new user.`);
     }
 
     console.log("User Info:", user);
@@ -62,6 +74,6 @@ const signOut = async (navigate) => {
   } catch (error) {
     console.error("Error signing out:", error);
   }
-}
+};
 
 export { signInWithGoogle, signOut };

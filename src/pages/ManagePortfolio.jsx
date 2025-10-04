@@ -8,8 +8,8 @@ import Loading from "./Loading";
 import TextField from "../components/TextField";
 import ArrayField from "../components/ArrayField";
 import LayoutSettings from "../components/LayoutSettings";
-import Portfolio from "./Portfolio";
 import { useNavigate } from "react-router";
+import PortfolioPreview from "./PortfolioPreview";
 
 export default function ManagePortfolio() {
     const { user, loading } = useAuth();
@@ -26,27 +26,28 @@ export default function ManagePortfolio() {
                 docSnap.exists()
                     ? docSnap.data()
                     : {
-                          firstName: "",
-                          lastName: "",
-                          location: "",
-                          contactEmail: user.email || "",
-                          contactPhone: "",
-                          currentRole: "",
-                          bio: "",
-                          links: [],
-                          skills: [],
-                          resume: "",
-                          experiences: [],
-                          education: [],
-                          pfp: "",
-                          layout: {
-                              pageLayout: "single",
-                              navLayout: "top",
-                              fontFamily: "Poppins",
-                              fontSizeScale: 1.0,
-                              defaultTheme: "light",
-                          },
-                      }
+                        firstName: "",
+                        lastName: "",
+                        location: "",
+                        contactEmail: user.email || "",
+                        contactPhone: "",
+                        currentRole: "",
+                        bio: "",
+                        links: [],
+                        skills: [],
+                        resume: "",
+                        experiences: [],
+                        education: [],
+                        pfp: "",
+                        subdomain: user.uid,
+                        layout: {
+                            pageLayout: "single",
+                            navLayout: "top",
+                            fontFamily: "Poppins",
+                            fontSizeScale: 1.0,
+                            defaultTheme: "light",
+                        },
+                    }
             );
         };
         fetchData();
@@ -61,8 +62,32 @@ export default function ManagePortfolio() {
         if (!user) return;
         setSaving(true);
         try {
-            const docRef = doc(db, "users", user.uid);
-            await setDoc(docRef, formData, { merge: true });
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            const oldSubdomain = userSnap.exists() ? userSnap.data().subdomain : null;
+            const newSubdomain = formData.subdomain.toLowerCase();
+
+            // Check if subdomain already exists
+            const subRef = doc(db, "subdomains", newSubdomain);
+            const subSnap = await getDoc(subRef);
+
+            if (subSnap.exists() && subSnap.data().uid !== user.uid) {
+                alert("This subdomain is already taken. Please choose another.");
+                setSaving(false);
+                return;
+            }
+
+            // If subdomain changed, delete old one and add new one
+            if (oldSubdomain && oldSubdomain !== newSubdomain) {
+                const oldSubRef = doc(db, "subdomains", oldSubdomain);
+                await setDoc(oldSubRef, {}, { merge: false }); // Clear or delete old subdomain
+                await setDoc(subRef, { subdomain: newSubdomain, uid: user.uid });
+            } else if (!subSnap.exists()) {
+                // If it’s new and available, set it
+                await setDoc(subRef, { subdomain: newSubdomain, uid: user.uid });
+            }
+
+            await setDoc(userRef, formData, { merge: true });
             alert("Portfolio saved!");
         } catch (err) {
             console.error(err);
@@ -78,8 +103,14 @@ export default function ManagePortfolio() {
                 {/* Input form */}
                 <SplitterPanel size={30} minSize={20}>
                     <div className="flex flex-col">
-                        <h2>Manage Portfolio</h2>                          
+                        <h2>Manage Portfolio</h2>
 
+                        <TextField
+                            label="Subdomain"
+                            value={formData.subdomain}
+                            onChange={(val) => handleChange("subdomain", val.toLowerCase())}
+                            helperText={`Your portfolio will be available at https://${formData.subdomain}.upstack.cv`}
+                        />
                         <TextField
                             label="First Name"
                             value={formData.firstName}
@@ -129,7 +160,7 @@ export default function ManagePortfolio() {
                             onClick={handleSave}
                             disabled={saving}
                             className="mt-4 w-full"
-                        />                        
+                        />
                     </div>
                 </SplitterPanel>
 
@@ -137,7 +168,7 @@ export default function ManagePortfolio() {
                 <SplitterPanel size={70} minSize={50}>
                     <div className="flex flex-col">
                         <h2>Live Preview</h2>
-                        <Portfolio data={formData} />
+                        <PortfolioPreview data={formData} />
                     </div>
 
                 </SplitterPanel>

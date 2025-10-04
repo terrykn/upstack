@@ -1,0 +1,82 @@
+{
+  "firstName": "Terry",
+  "lastName": "Nguyen",
+  "location": "New York City, New York",
+  "contactEmail": "terryknguyen@gmail.com",
+  "contactPhone": "+1 (555) 123-4567",
+  "currentRole": "Full Stack Engineer",
+  "bio": "Hi, I'm a full stack engineer passionate about building scalable web apps and beautiful interfaces.",
+  "links": [
+    { "platform": "GitHub", "url": "https://github.com/terrykn" },
+    { "platform": "LinkedIn", "url": "https://linkedin.com/in/terrykn" }
+  ],
+  "pfp": "https://tse3.mm.bing.net/th/id/OIP.6Q5kNQE7h-lSpiiTFA_oRQHaHa?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
+  "skills": [
+    { "type": "Technical", "name": "JavaScript", "level": "4" },
+    { "type": "Technical", "name": "Python", "level": "5" },
+    { "type": "Framework", "name": "React", "level": "4" },
+    { "type": "Tools", "name": "Github", "level": "4" },
+    { "type": "Tools", "name": "MongoDB", "level": "3" }
+  ],
+  "resume": "https://jakesresume.com/files/Jakes-Resume-Example.pdf",
+  "experiences": [
+    {
+      "companyName": "WebWorks",
+      "position": "Junior Developer",
+      "location": "Remote",
+      "startDate": "2023-09-01",
+      "endDate": "",
+      "awards": [],
+      "media": []
+    },
+    {
+      "companyName": "TechCorp",
+      "position": "Software Engineer Intern",
+      "location": "New York City, NY",
+      "startDate": "2022-06-01",
+      "endDate": "2022-08-30",
+      "awards": ["Intern of the Month - July"],
+      "media": [
+        { "type": "image", "url": "https://swiftmedia.s3.amazonaws.com/mountain.swiftcom.com/images/sites/9/2023/12/14084125/8DB71748-E512-4F1C-8268-8F02EDF5FD2A_1_201_a-1024x806.jpeg" },
+        { "type": "video", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "schoolName": "Rutgers University",
+      "location": "New Jersey, USA",
+      "startDate": "2021-09-01",
+      "endDate": "2025-05-15",
+      "majors": ["Computer Science", "Mathematics"],
+      "minors": ["Psychology"],
+      "gpa": "3.8",
+      "rank": "Top 5%",
+      "relevantCourses": ["Data Structures", "Machine Learning", "Multivariable Calculus"],
+      "awards": ["Dean’s List (2022, 2023, 2024)"],
+      "info": "",
+      "media": [
+        { "type": "image", "url": "https://th.bing.com/th/id/R.375492d3c96164ce7af710fc1e14af3a?rik=vBAaPLxFSz7LbQ&pid=ImgRaw&r=0" }
+      ]
+    }
+  ],
+  "layout": {
+    "pageLayout": "multi",
+    "navLayout": "top",
+    "fontFamily": "Poppins",
+    "fontSizeScale": 1.0,
+    "defaultTheme": "auto",
+    "specialTheme": "",
+    "primaryColor": "#4F46E5",
+    "secondaryColor": "#06B6D4",
+    "backgroundColor": "#F9FAFB",
+    "projectsLayout": "gallery",
+    "experiencesLayout": "timeline",
+    "skillsLayout": "chips",
+    "contactsLayout": "icons",
+    "showEmailForm": true,
+    "domain": "terry.upstack.cv",
+    "favicon": "https://cdn.upstack.cv/users/terry/favicon.ico",
+    "footerLayout": "minimal"
+  }
+}

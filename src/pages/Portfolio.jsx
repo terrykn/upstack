@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import Loading from "./Loading";
 
 export default function Portfolio({ subdomain }) {
-  const [userData, setUserData] = useState(null);
+  const [portfolioData, setPortfolioData] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -14,7 +14,6 @@ export default function Portfolio({ subdomain }) {
     const fetchPortfolioData = async () => {
       try {
         const subdomainKey = subdomain.toLowerCase().trim();
-
         const subRef = doc(db, "subdomains", subdomainKey);
         const subSnap = await getDoc(subRef);
 
@@ -25,25 +24,7 @@ export default function Portfolio({ subdomain }) {
           return;
         }
 
-        const subdomainData = subSnap.data();
-
-        if (!subdomainData?.uid) {
-          console.error(`Subdomain "${subdomainKey}" has no associated uid.`);
-          setNotFound(true);
-          setLoading(false);
-          return;
-        }
-
-        const userRef = doc(db, "users", subdomainData.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-          setUserData(userSnap.data());
-          setNotFound(false);
-        } else {
-          console.warn(`User document for uid "${subdomainData.uid}" not found.`);
-          setNotFound(true);
-        }
+        setPortfolioData(subSnap.data());
       } catch (err) {
         console.error("Error fetching portfolio data:", err);
         setNotFound(true);
@@ -56,9 +37,14 @@ export default function Portfolio({ subdomain }) {
   }, [subdomain]);
 
   if (loading) return <Loading />;
-  if (notFound) return <div className="p-8 text-center text-gray-500">Portfolio not found.</div>;
+  if (notFound)
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Portfolio not found.
+      </div>
+    );
 
-  const user = userData;
+  const user = portfolioData;
 
   return (
     <div className="container mx-auto p-4 space-y-4">
@@ -107,7 +93,8 @@ export default function Portfolio({ subdomain }) {
           <ul>
             {user.experiences.map((exp, i) => (
               <li key={i}>
-                {exp.position} at {exp.companyName} ({exp.startDate} - {exp.endDate || "Present"})
+                {exp.position} at {exp.companyName} (
+                {exp.startDate} - {exp.endDate || "Present"})
               </li>
             ))}
           </ul>

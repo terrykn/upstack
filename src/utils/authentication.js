@@ -15,7 +15,19 @@ const signInWithGoogle = async (navigate) => {
     const userDocSnap = await getDoc(userDocRef);
 
     if (!userDocSnap.exists()) {
+      // Create minimal user doc (for auth tracking)
       await setDoc(userDocRef, {
+        email: user.email || "",
+        createdAt: new Date().toISOString(),
+        subdomain: user.uid.toLowerCase(),
+      });
+
+      const subdomainKey = user.uid.toLowerCase();
+      const subdomainRef = doc(db, "subdomains", subdomainKey);
+
+      // Create subdomain doc containing portfolio data + uid
+      await setDoc(subdomainRef, {
+        uid: user.uid,
         firstName: "",
         lastName: "",
         location: "",
@@ -29,7 +41,6 @@ const signInWithGoogle = async (navigate) => {
         experiences: [],
         education: [],
         pfp: "",
-        subdomain: user.uid, 
         layout: {
           pageLayout: "single",
           navLayout: "top",
@@ -50,13 +61,7 @@ const signInWithGoogle = async (navigate) => {
         },
       });
 
-      const subdomainKey = user.uid; 
-      const subdomainRef = doc(db, "subdomains", subdomainKey);
-      await setDoc(subdomainRef, {
-        uid: user.uid,
-      });
-
-      console.log("Created new user and subdomain entry.");
+      console.log("Created new user and portfolio subdomain document.");
     }
 
     console.log("User Info:", user);

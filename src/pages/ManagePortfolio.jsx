@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import Loading from "./Loading";
 import TextField from "../components/TextField";
 import ArrayField from "../components/ArrayField";
@@ -13,7 +13,6 @@ import PortfolioPreview from "./PortfolioPreview";
 
 export default function ManagePortfolio() {
     const { user, loading } = useAuth();
-    const navigate = useNavigate();
     const [formData, setFormData] = useState(null);
     const [saving, setSaving] = useState(false);
 
@@ -61,38 +60,43 @@ export default function ManagePortfolio() {
     const handleSave = async () => {
         if (!user) return;
         setSaving(true);
+
         try {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await getDoc(userRef);
             const oldSubdomain = userSnap.exists() ? userSnap.data().subdomain : null;
-            const newSubdomain = formData.subdomain.toLowerCase();
+            const newSubdomain = formData.subdomain.trim().toLowerCase();
 
-            // Check if subdomain already exists
-            const subRef = doc(db, "subdomains", newSubdomain);
-            const subSnap = await getDoc(subRef);
+            if (!newSubdomain) {
+                alert("Subdomain cannot be empty.");
+                setSaving(false);
+                return;
+            }
 
-            if (subSnap.exists() && subSnap.data().uid !== user.uid) {
+            // Check if subdomain already exists and isn't owned by this user
+            const newSubRef = doc(db, "subdomains", newSubdomain);
+            const newSubSnap = await getDoc(newSubRef);
+
+            if (newSubSnap.exists() && newSubSnap.data().uid !== user.uid) {
                 alert("This subdomain is already taken. Please choose another.");
                 setSaving(false);
                 return;
             }
 
-            // If subdomain changed, delete old one and add new one
             if (oldSubdomain && oldSubdomain !== newSubdomain) {
                 const oldSubRef = doc(db, "subdomains", oldSubdomain);
-                await setDoc(oldSubRef, {}, { merge: false }); // Clear or delete old subdomain
-                await setDoc(subRef, { subdomain: newSubdomain, uid: user.uid });
-            } else if (!subSnap.exists()) {
-                // If it’s new and available, set it
-                await setDoc(subRef, { subdomain: newSubdomain, uid: user.uid });
+                await deleteDoc(oldSubRef);
             }
 
-            await setDoc(userRef, formData, { merge: true });
+            await setDoc(newSubRef, { uid: user.uid });
+            await setDoc(userRef, { ...formData, subdomain: newSubdomain }, { merge: true });
+
             alert("Portfolio saved!");
         } catch (err) {
-            console.error(err);
-            alert("Error saving portfolio.");
+            console.error("Error saving portfolio:", err);
+            alert("Error saving portfolio. Check the console for details.");
         }
+
         setSaving(false);
     };
 

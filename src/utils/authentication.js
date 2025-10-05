@@ -29,7 +29,7 @@ const signInWithGoogle = async (navigate) => {
         experiences: [],
         education: [],
         pfp: "",
-        subdomain: user.uid,
+        subdomain: user.uid, 
         layout: {
           pageLayout: "single",
           navLayout: "top",
@@ -50,13 +50,13 @@ const signInWithGoogle = async (navigate) => {
         },
       });
 
-      const subdomainRef = doc(db, "subdomains", user.uid);
+      const subdomainKey = user.uid; 
+      const subdomainRef = doc(db, "subdomains", subdomainKey);
       await setDoc(subdomainRef, {
-        subdomain: user.uid,
         uid: user.uid,
       });
 
-      console.log(`Created new user.`);
+      console.log("Created new user and subdomain entry.");
     }
 
     console.log("User Info:", user);

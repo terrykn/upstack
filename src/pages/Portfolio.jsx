@@ -13,26 +13,35 @@ export default function Portfolio({ subdomain }) {
 
     const fetchPortfolioData = async () => {
       try {
-        // Check if subdomain exists
-        const subRef = doc(db, "subdomains", subdomain.toLowerCase());
+        const subdomainKey = subdomain.toLowerCase().trim();
+
+        const subRef = doc(db, "subdomains", subdomainKey);
         const subSnap = await getDoc(subRef);
 
         if (!subSnap.exists()) {
+          console.warn(`Subdomain "${subdomainKey}" not found.`);
           setNotFound(true);
           setLoading(false);
           return;
         }
 
-        const { uid } = subSnap.data();
+        const subdomainData = subSnap.data();
 
-        // Fetch the user data for uid associated with found subdomain
-        const userRef = doc(db, "users", uid);
+        if (!subdomainData?.uid) {
+          console.error(`Subdomain "${subdomainKey}" has no associated uid.`);
+          setNotFound(true);
+          setLoading(false);
+          return;
+        }
+
+        const userRef = doc(db, "users", subdomainData.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
           setUserData(userSnap.data());
           setNotFound(false);
         } else {
+          console.warn(`User document for uid "${subdomainData.uid}" not found.`);
           setNotFound(true);
         }
       } catch (err) {
@@ -53,7 +62,10 @@ export default function Portfolio({ subdomain }) {
 
   return (
     <div className="container mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold">{user.firstName} {user.lastName}</h1>
+      <h1 className="text-2xl font-bold">
+        {user.firstName} {user.lastName}
+      </h1>
+
       <p><strong>Location:</strong> {user.location}</p>
       <p><strong>Role:</strong> {user.currentRole}</p>
       <p><strong>Bio:</strong> {user.bio}</p>

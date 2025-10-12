@@ -6,6 +6,7 @@ import Loading from '../pages/Loading';
 import { Button } from 'primereact/button';
 import { ToggleButton } from 'primereact/togglebutton';
 import { useNavigate } from 'react-router';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Navbar({ theme, setTheme }) {
     const { user, loading } = useAuth();
@@ -39,7 +40,7 @@ export default function Navbar({ theme, setTheme }) {
     const end = (
         <>
             {user ? (
-                <div className="flex align-items-center gap-2">
+             <>
                     <ToggleButton
                         onLabel=""
                         offLabel=""
@@ -48,16 +49,17 @@ export default function Navbar({ theme, setTheme }) {
                         checked={theme === 'light'}
                         onChange={(e) => setTheme(e.value ? 'light' : 'dark')}
                     />
+                    <ThemeSwitcher />
                     {!isSubdomain && (
                         <>
                             <Button label="Manage Portfolio" onClick={() => navigate('/manage-portfolio')} />
                             <Button label="Sign Out" onClick={() => signOut(navigate)} />
                         </>
                     )}
-                </div>
+             </>
             ) : (
                 !isSubdomain && (
-                    <div className="flex align-items-center gap-2">
+                    <>
                         <ToggleButton
                             onLabel=""
                             offLabel=""
@@ -67,7 +69,7 @@ export default function Navbar({ theme, setTheme }) {
                             onChange={(e) => setTheme(e.value ? 'light' : 'dark')}
                         />
                         <Button label="Sign In" onClick={() => navigate('/login')} />
-                    </div>
+                    </>
                 )
             )}
         </>

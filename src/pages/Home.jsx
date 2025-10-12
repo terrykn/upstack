@@ -32,17 +32,17 @@ export default function Home() {
 
     const responsiveOptions = [
         {
-            breakpoint: '1024px',
+            breakpoint: '3000px',
             numVisible: 3,
-            numScroll: 3
+            numScroll: 1
+        },
+        {
+            breakpoint: '1024px',
+            numVisible: 2,
+            numScroll: 1
         },
         {
             breakpoint: '768px',
-            numVisible: 2,
-            numScroll: 2
-        },
-        {
-            breakpoint: '560px',
             numVisible: 1,
             numScroll: 1
         }
@@ -64,8 +64,8 @@ export default function Home() {
     const plansBodyTemplate = (rowData, field) => {
         const value = rowData[field];
         if (typeof value === 'boolean') {
-            return value ? 
-                <i style={{ fontSize: '1.5rem' }}></i> : 
+            return value ?
+                <i style={{ fontSize: '1.5rem' }}></i> :
                 <i style={{ fontSize: '1.5rem' }}></i>;
         }
         return value;
@@ -73,33 +73,35 @@ export default function Home() {
 
     return (
         <div>
-            <section>
-                <h1>Turn Your Experience into a Beautiful Portfolio in Minutes</h1>
-                <p>No code, no design stress, customized by you.</p>
-                <Button label="START FOR FREE" size="large" onClick={() => navigate('/login')} />
+            <section id="home">
+                <div className="hero">
+                    <h1 className="hero-title">Deploy a Stunning Portfolio in Minutes</h1>
+                    <span className="hero-subtitle">No code, no design stress, customized for you.</span>
+                    <Button label="Start Free" size="large" rounded onClick={() => navigate('/login')} />
+                </div>
             </section>
 
             <section id="how-it-works">
                 <h2>How It Works</h2>
-                <div>
+                <div className="how-it-works-fieldsets">
                     <div>
                         <Fieldset legend="1. Add Your Info">
                             <p>
-                                Easily input your professional experience, education, projects, and skills. Our intuitive forms make it simple to add and organize your content.
+                                Fill out your experiences, education, projects, and skills.
                             </p>
                         </Fieldset>
                     </div>
                     <div>
                         <Fieldset legend="2. Customize Your Template">
                             <p>
-                                Choose from a variety of professionally designed templates. Customize colors, fonts, and layouts to match your personal brand.
+                                Customize and choose from a variety of templates to match your vision.
                             </p>
                         </Fieldset>
                     </div>
                     <div>
                         <Fieldset legend="3. Choose a Domain & Publish">
                             <p>
-                                Select a custom `upstack.cv` domain or connect your own. Publish your portfolio with one click and share it with the world.
+                                Select a custom upstack.cv domain and publish your portfolio to the world!
                             </p>
                         </Fieldset>
                     </div>
@@ -109,7 +111,7 @@ export default function Home() {
             <section id="demos">
                 <h2>Demos</h2>
                 <div>
-                    <Carousel value={demos} numVisible={3} numScroll={1} responsiveOptions={responsiveOptions} itemTemplate={demoTemplate} />
+                    <Carousel circular value={demos} responsiveOptions={responsiveOptions} itemTemplate={demoTemplate} />
                 </div>
             </section>
 
@@ -117,18 +119,18 @@ export default function Home() {
                 <h2>Plans & Pricing</h2>
                 <div>
                     <DataTable value={features} showGridlines tableStyle={{ minWidth: '50rem' }}>
-                        <Column field="feature" header="PLANS" style={{ width: '30%' }} />
-                        <Column 
-                            field="basic" 
-                            header="BASIC" 
-                            body={(rowData) => plansBodyTemplate(rowData, 'basic')} 
-                            style={{ width: '35%' }} 
+                        <Column field="feature" style={{ width: '30%' }} />
+                        <Column
+                            field="basic"
+                            header="BASIC"
+                            body={(rowData) => plansBodyTemplate(rowData, 'basic')}
+                            style={{ width: '35%' }}
                         />
-                        <Column 
-                            field="pro" 
-                            header="PRO" 
-                            body={(rowData) => plansBodyTemplate(rowData, 'pro')} 
-                            style={{ width: '35%' }} 
+                        <Column
+                            field="pro"
+                            header="PRO"
+                            body={(rowData) => plansBodyTemplate(rowData, 'pro')}
+                            style={{ width: '35%' }}
                         />
                     </DataTable>
                 </div>

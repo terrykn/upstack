@@ -1,3 +1,11 @@
+main {
+  padding: 0.5rem 4rem;
+}
+
+body {
+  padding-top: 3.25rem;
+}
+
 .container {
   margin-left: auto;
   margin-right: auto;
@@ -18,10 +26,52 @@
   margin-bottom: 0.5rem;
 }
 
-.hero {
+#home .hero {
   display: flex;
-  align-items: center;
-  gap: 1rem;       
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  height: 70vh;
+}
+
+#home .hero-title {
+  text-align: center;
+  font-size: 3.5rem;
+  max-width: 600px;
+  margin-bottom: 0rem;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero .p-button {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.how-it-works-fieldsets {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;;
+}
+
+@media (max-width: 768px) {
+  .how-it-works-fieldsets {
+    flex-direction: column;
+  }
+}
+
+#how-it-works .p-fieldset-legend {
+  padding: 0.75rem;
+}
+
+#how-it-works .p-fieldset-content {
+  padding: 0.5rem;
 }
 
 .profile-img {
@@ -29,6 +79,28 @@
   height: 8rem;        
   border-radius: 9999px;
   object-fit: cover;
+}
+
+.p-menubar {
+  position: fixed;
+  padding: 0.5rem;
+  border-radius: 0rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+#demos .p-carousel-item > div {
+  max-width: 400px; 
+  margin: 0 auto;
+}
+
+#demos img {
+  width: 100%;
+  height: 300px;     
+  object-fit: cover; 
+  border-radius: 0.5rem;
 }
 
 .section-content {
@@ -46,4 +118,20 @@
     margin-bottom: 1.2rem;
 }
 
+.p-component {
+  font-size: 0.9rem;
+}
 
+.p-menubar {
+  padding: 0.5rem 4rem;
+}
+
+.p-menubar-start {
+  padding-right: 1rem;
+}
+
+.p-menubar-end {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}

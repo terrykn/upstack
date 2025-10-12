@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { db } from "../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "./Loading";
+import PageTemplate from "../components/PageTemplate";
 
 export default function PortfolioPreview() {
   const { user, loading } = useAuth();
@@ -61,94 +62,8 @@ export default function PortfolioPreview() {
   if (!portfolioData) return <p>No portfolio data found.</p>;
 
   return (
-    <div className="container mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold">
-        {portfolioData.firstName} {portfolioData.lastName}
-      </h1>
-      <p><strong>Location:</strong> {portfolioData.location}</p>
-      <p><strong>Role:</strong> {portfolioData.currentRole}</p>
-      <p><strong>Bio:</strong> {portfolioData.bio}</p>
-      <p><strong>Contact Email:</strong> {portfolioData.contactEmail}</p>
-      <p><strong>Contact Phone:</strong> {portfolioData.contactPhone}</p>
-
-      {portfolioData.links && (
-        <div>
-          <strong>Links:</strong>
-          <ul>
-            {portfolioData.links.map((link, i) => (
-              <li key={i}>
-                {link.platform}:{" "}
-                <a href={link.url} target="_blank" rel="noopener noreferrer">
-                  {link.url}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {portfolioData.skills && (
-        <div>
-          <strong>Skills:</strong>
-          <ul>
-            {portfolioData.skills.map((skill, i) => (
-              <li key={i}>
-                {skill.type} - {skill.name} (Level {skill.level})
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {portfolioData.experiences && (
-        <div>
-          <strong>Experiences:</strong>
-          <ul>
-            {portfolioData.experiences.map((exp, i) => (
-              <li key={i}>
-                {exp.position} at {exp.companyName} ({exp.startDate} -{" "}
-                {exp.endDate || "Present"})
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {portfolioData.education && (
-        <div>
-          <strong>Education:</strong>
-          <ul>
-            {portfolioData.education.map((edu, i) => (
-              <li key={i}>
-                {edu.schoolName} ({edu.startDate} - {edu.endDate})
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {portfolioData.resume && (
-        <div>
-          <strong>Resume:</strong>{" "}
-          <a
-            href={portfolioData.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {portfolioData.resume}
-          </a>
-        </div>
-      )}
-
-      {portfolioData.pfp && (
-        <div>
-          <img
-            src={portfolioData.pfp}
-            alt="Profile Picture"
-            className="w-32 h-32 rounded-full"
-          />
-        </div>
-      )}
+    <div className="container">
+      <PageTemplate data={portfolioData} />
     </div>
   );
 }

@@ -28,10 +28,10 @@ export default function Navbar({ theme, setTheme }) {
 
     const portfolioItems = [
         { label: "Home", url: "/" },
-        { label: "About", url: "/about" },
-        { label: "Projects", url: "/projects" },
-        { label: "Experience", url: "/experience" },
-        { label: "Education", url: "/education" },
+        { label: "About", url: "#about" },
+        { label: "Projects", url: "#projects" },
+        { label: "Experience", url: "#experience" },
+        { label: "Education", url: "#education" },
     ];
 
     const start = <span>Upstack</span>;

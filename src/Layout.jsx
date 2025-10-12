@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import { Outlet } from "react-router";
 import './assets/themes/light-theme.css';
+import './layout.css';
 
 export default function Layout() {
     const [theme, setTheme] = useState('light');

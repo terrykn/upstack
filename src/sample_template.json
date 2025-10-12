@@ -12,11 +12,11 @@
   ],
   "pfp": "https://tse3.mm.bing.net/th/id/OIP.6Q5kNQE7h-lSpiiTFA_oRQHaHa?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
   "skills": [
-    { "type": "Technical", "name": "JavaScript", "level": "4" },
-    { "type": "Technical", "name": "Python", "level": "5" },
-    { "type": "Framework", "name": "React", "level": "4" },
-    { "type": "Tools", "name": "Github", "level": "4" },
-    { "type": "Tools", "name": "MongoDB", "level": "3" }
+    { "type": "Technical", "name": "JavaScript"},
+    { "type": "Technical", "name": "Python" },
+    { "type": "Framework", "name": "React" },
+    { "type": "Tools", "name": "Github" },
+    { "type": "Tools", "name": "MongoDB" }
   ],
   "resume": "https://jakesresume.com/files/Jakes-Resume-Example.pdf",
   "experiences": [

@@ -1,3 +1,6 @@
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
+import { Tag } from 'primereact/tag';
 import { ProjectsGallery, ProjectsCards } from './layouts/ProjectsLayout';
 import { ExperiencesTimeline, ExperiencesGallery, ExperiencesCards } from './layouts/ExperiencesLayout';
 import { SkillsChips, SkillsBars, SkillsGrid } from './layouts/SkillsLayout';
@@ -46,7 +49,7 @@ export default function PageTemplate({ data }) {
 
   return (
     <div 
-      className="min-h-screen"
+      className="portfolio-template"
       style={{
         fontFamily: layout.fontFamily || 'system-ui',
         fontSize: `${(layout.fontSizeScale || 1) * 16}px`,
@@ -54,33 +57,33 @@ export default function PageTemplate({ data }) {
       }}
     >
       {/* Header Section */}
-      <header className="bg-white shadow-sm py-12">
-        <div className="container mx-auto px-4 text-center">
+      <header className="portfolio-header">
+        <div className="container">
           {data.pfp && (
             <img 
               src={data.pfp} 
               alt={`${data.firstName} ${data.lastName}`}
-              className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-lg"
+              className="portfolio-pfp"
             />
           )}
-          <h1 className="text-4xl font-bold mb-2">
+          <h1 className="portfolio-name">
             {data.firstName} {data.lastName}
           </h1>
-          <p className="text-xl text-gray-600 mb-2">{data.currentRole}</p>
-          <p className="text-gray-500">{data.location}</p>
+          <p className="portfolio-role">{data.currentRole}</p>
+          <p className="portfolio-location">{data.location}</p>
           {data.bio && (
-            <p className="mt-4 text-gray-700 max-w-2xl mx-auto">{data.bio}</p>
+            <p className="portfolio-bio">{data.bio}</p>
           )}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 space-y-16">
+      <main className="portfolio-main container">
         
         {/* Skills Section */}
         {data.skills && data.skills.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold mb-6" style={{ color: layout.primaryColor }}>
+          <section className="portfolio-section">
+            <h2 className="section-title" style={{ color: layout.primaryColor }}>
               Skills
             </h2>
             <SkillsComponent skills={data.skills} />
@@ -89,8 +92,8 @@ export default function PageTemplate({ data }) {
 
         {/* Experience Section */}
         {data.experiences && data.experiences.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold mb-6" style={{ color: layout.primaryColor }}>
+          <section className="portfolio-section">
+            <h2 className="section-title" style={{ color: layout.primaryColor }}>
               Experience
             </h2>
             <ExperiencesComponent experiences={data.experiences} />
@@ -99,52 +102,52 @@ export default function PageTemplate({ data }) {
 
         {/* Education Section */}
         {data.education && data.education.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold mb-6" style={{ color: layout.primaryColor }}>
+          <section className="portfolio-section">
+            <h2 className="section-title" style={{ color: layout.primaryColor }}>
               Education
             </h2>
-            <div className="space-y-6">
+            <div className="education-cards">
               {data.education.map((edu, idx) => (
-                <div key={idx} className="bg-white rounded-lg shadow-md p-6">
-                  <div className="flex justify-between items-start mb-4">
+                <Card key={idx} className="education-card">
+                  <div className="education-header">
                     <div>
-                      <h3 className="text-2xl font-bold">{edu.schoolName}</h3>
-                      <p className="text-gray-600">{edu.location}</p>
+                      <h3>{edu.schoolName}</h3>
+                      <p className="education-location">{edu.location}</p>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="education-dates">
                       {new Date(edu.startDate).getFullYear()} - {new Date(edu.endDate).getFullYear()}
                     </span>
                   </div>
                   
                   {edu.majors && (
-                    <p className="mb-2">
-                      <span className="font-semibold">Major(s):</span> {edu.majors.join(', ')}
+                    <p className="education-field">
+                      <strong>Major(s):</strong> {edu.majors.join(', ')}
                     </p>
                   )}
                   
                   {edu.minors && edu.minors.length > 0 && (
-                    <p className="mb-2">
-                      <span className="font-semibold">Minor(s):</span> {edu.minors.join(', ')}
+                    <p className="education-field">
+                      <strong>Minor(s):</strong> {edu.minors.join(', ')}
                     </p>
                   )}
                   
                   {edu.gpa && (
-                    <p className="mb-2">
-                      <span className="font-semibold">GPA:</span> {edu.gpa}
+                    <p className="education-field">
+                      <strong>GPA:</strong> {edu.gpa}
                     </p>
                   )}
                   
                   {edu.awards && edu.awards.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="font-semibold mb-2">Awards:</h4>
-                      <ul className="list-disc list-inside text-gray-600">
+                    <div className="education-awards">
+                      <h4>Awards:</h4>
+                      <ul>
                         {edu.awards.map((award, i) => (
                           <li key={i}>{award}</li>
                         ))}
                       </ul>
                     </div>
                   )}
-                </div>
+                </Card>
               ))}
             </div>
           </section>
@@ -152,8 +155,8 @@ export default function PageTemplate({ data }) {
 
         {/* Projects Section (if you have projects data) */}
         {data.projects && data.projects.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold mb-6" style={{ color: layout.primaryColor }}>
+          <section className="portfolio-section">
+            <h2 className="section-title" style={{ color: layout.primaryColor }}>
               Projects
             </h2>
             <ProjectsComponent projects={data.projects} />
@@ -161,8 +164,8 @@ export default function PageTemplate({ data }) {
         )}
 
         {/* Contact Section */}
-        <section>
-          <h2 className="text-3xl font-bold mb-6" style={{ color: layout.primaryColor }}>
+        <section className="portfolio-section">
+          <h2 className="section-title" style={{ color: layout.primaryColor }}>
             Contact
           </h2>
           <ContactsComponent user={data} />
@@ -170,16 +173,14 @@ export default function PageTemplate({ data }) {
 
         {/* Resume Download */}
         {data.resume && (
-          <section className="text-center">
-            <a 
-              href={data.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          <section className="portfolio-section resume-section">
+            <Button 
+              label="Download Resume"
+              icon="pi pi-download"
+              className="p-button-raised"
               style={{ backgroundColor: layout.primaryColor }}
-            >
-              Download Resume
-            </a>
+              onClick={() => window.open(data.resume, '_blank')}
+            />
           </section>
         )}
       </main>

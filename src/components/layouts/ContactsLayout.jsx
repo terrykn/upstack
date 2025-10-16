@@ -1,112 +1,115 @@
-import { Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 
 export function ContactsIcons({ user }) {
   const platformIcons = {
-    GitHub: Github,
-    LinkedIn: Linkedin,
+    GitHub: 'pi-github',
+    LinkedIn: 'pi-linkedin',
   };
 
   return (
-    <div className="flex flex-wrap gap-4 justify-center">
+    <div className="contacts-icons">
       {user.contactEmail && (
-        <a href={`mailto:${user.contactEmail}`} className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
-          <Mail size={20} />
-          <span>{user.contactEmail}</span>
-        </a>
+        <Button 
+          label={user.contactEmail}
+          icon="pi pi-envelope"
+          className="p-button-outlined contact-button"
+          onClick={() => window.location.href = `mailto:${user.contactEmail}`}
+        />
       )}
       {user.contactPhone && (
-        <a href={`tel:${user.contactPhone}`} className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
-          <Phone size={20} />
-          <span>{user.contactPhone}</span>
-        </a>
+        <Button 
+          label={user.contactPhone}
+          icon="pi pi-phone"
+          className="p-button-outlined contact-button"
+          onClick={() => window.location.href = `tel:${user.contactPhone}`}
+        />
       )}
       {user.location && (
-        <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg">
-          <MapPin size={20} />
-          <span>{user.location}</span>
-        </div>
+        <Button 
+          label={user.location}
+          icon="pi pi-map-marker"
+          className="p-button-outlined contact-button"
+          disabled
+        />
       )}
-      {user.links?.map((link, idx) => {
-        const Icon = platformIcons[link.platform] || Github;
-        return (
-          <a 
-            key={idx} 
-            href={link.url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
-          >
-            <Icon size={20} />
-            <span>{link.platform}</span>
-          </a>
-        );
-      })}
+      {user.links?.map((link, idx) => (
+        <Button 
+          key={idx}
+          label={link.platform}
+          icon={`pi ${platformIcons[link.platform] || 'pi-link'}`}
+          className="p-button-outlined contact-button"
+          onClick={() => window.open(link.url, '_blank')}
+        />
+      ))}
     </div>
   );
 }
 
 export function ContactsList({ user }) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
+    <Card className="contacts-list-card">
       {user.contactEmail && (
-        <div>
-          <label className="text-sm font-semibold text-gray-600">Email</label>
-          <p className="text-lg">{user.contactEmail}</p>
+        <div className="contact-item">
+          <label className="contact-label">Email</label>
+          <p className="contact-value">{user.contactEmail}</p>
         </div>
       )}
       {user.contactPhone && (
-        <div>
-          <label className="text-sm font-semibold text-gray-600">Phone</label>
-          <p className="text-lg">{user.contactPhone}</p>
+        <div className="contact-item">
+          <label className="contact-label">Phone</label>
+          <p className="contact-value">{user.contactPhone}</p>
         </div>
       )}
       {user.location && (
-        <div>
-          <label className="text-sm font-semibold text-gray-600">Location</label>
-          <p className="text-lg">{user.location}</p>
+        <div className="contact-item">
+          <label className="contact-label">Location</label>
+          <p className="contact-value">{user.location}</p>
         </div>
       )}
       {user.links && user.links.length > 0 && (
-        <div>
-          <label className="text-sm font-semibold text-gray-600">Links</label>
-          <ul className="space-y-2 mt-2">
+        <div className="contact-item">
+          <label className="contact-label">Links</label>
+          <ul className="contact-links-list">
             {user.links.map((link, idx) => (
               <li key={idx}>
-                <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                  {link.platform}
-                </a>
+                <Button 
+                  label={link.platform}
+                  link
+                  onClick={() => window.open(link.url, '_blank')}
+                />
               </li>
             ))}
           </ul>
         </div>
       )}
-    </div>
+    </Card>
   );
 }
 
 export function ContactsCards({ user }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="contacts-cards">
       {user.contactEmail && (
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <Mail size={32} className="mx-auto mb-3 text-blue-600" />
-          <h3 className="font-semibold mb-2">Email</h3>
-          <p className="text-sm text-gray-600">{user.contactEmail}</p>
-        </div>
+        <Card className="contact-card">
+          <i className="pi pi-envelope contact-card-icon"></i>
+          <h3>Email</h3>
+          <p>{user.contactEmail}</p>
+        </Card>
       )}
       {user.contactPhone && (
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <Phone size={32} className="mx-auto mb-3 text-green-600" />
-          <h3 className="font-semibold mb-2">Phone</h3>
-          <p className="text-sm text-gray-600">{user.contactPhone}</p>
-        </div>
+        <Card className="contact-card">
+          <i className="pi pi-phone contact-card-icon"></i>
+          <h3>Phone</h3>
+          <p>{user.contactPhone}</p>
+        </Card>
       )}
       {user.location && (
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <MapPin size={32} className="mx-auto mb-3 text-red-600" />
-          <h3 className="font-semibold mb-2">Location</h3>
-          <p className="text-sm text-gray-600">{user.location}</p>
-        </div>
+        <Card className="contact-card">
+          <i className="pi pi-map-marker contact-card-icon"></i>
+          <h3>Location</h3>
+          <p>{user.location}</p>
+        </Card>
       )}
     </div>
   );

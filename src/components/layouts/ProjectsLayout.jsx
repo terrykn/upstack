@@ -1,18 +1,22 @@
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
+import { Chip } from 'primereact/chip';
+
 export function ProjectsGallery({ projects }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="projects-gallery">
       {projects?.map((project, idx) => (
-        <div key={idx} className="group relative overflow-hidden rounded-lg shadow-lg">
+        <div key={idx} className="project-gallery-item">
           {project.image && (
             <img 
               src={project.image} 
               alt={project.name}
-              className="w-full h-64 object-cover transition-transform group-hover:scale-110"
+              className="project-gallery-image"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
-            <h3 className="text-white text-xl font-bold">{project.name}</h3>
-            <p className="text-gray-200 text-sm">{project.description}</p>
+          <div className="project-gallery-overlay">
+            <h3 className="project-gallery-title">{project.name}</h3>
+            <p className="project-gallery-description">{project.description}</p>
           </div>
         </div>
       ))}
@@ -22,26 +26,28 @@ export function ProjectsGallery({ projects }) {
 
 export function ProjectsCards({ projects }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="projects-cards">
       {projects?.map((project, idx) => (
-        <div key={idx} className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow">
-          <h3 className="text-2xl font-bold mb-3">{project.name}</h3>
-          <p className="text-gray-600 mb-4">{project.description}</p>
+        <Card key={idx} className="project-card">
+          <h3 className="project-card-title">{project.name}</h3>
+          <p className="project-card-description">{project.description}</p>
           {project.technologies && (
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="project-technologies">
               {project.technologies.map((tech, i) => (
-                <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                  {tech}
-                </span>
+                <Chip key={i} label={tech} className="project-tech-chip" />
               ))}
             </div>
           )}
           {project.link && (
-            <a href={project.link} className="text-blue-600 hover:underline">
-              View Project →
-            </a>
+            <Button 
+              label="View Project" 
+              icon="pi pi-arrow-right" 
+              iconPos="right"
+              link
+              onClick={() => window.open(project.link, '_blank')}
+            />
           )}
-        </div>
+        </Card>
       ))}
     </div>
   );

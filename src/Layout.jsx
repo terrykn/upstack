@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import { Outlet } from "react-router";
 import './layout.css';
-import Footer from "./components/Footer";
 
 export default function Layout() {
     const [theme, setTheme] = useState(() => localStorage.getItem('site-theme') || 'light');
@@ -19,7 +18,6 @@ export default function Layout() {
             <main>
                 <Outlet />
             </main>
-            <Footer />
         </div>
     )
 }

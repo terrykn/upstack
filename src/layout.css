@@ -81,16 +81,6 @@ body {
   object-fit: cover;
 }
 
-.p-menubar {
-  position: fixed;
-  padding: 0.5rem;
-  border-radius: 0rem;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-
 #demos .p-carousel-item > div {
   max-width: 400px; 
   margin: 0 auto;
@@ -123,7 +113,13 @@ body {
 }
 
 .p-menubar {
-  padding: 0.5rem 4rem;
+  position: fixed;
+  padding: 0.5rem 4.5rem;
+  border-radius: 0rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .p-menubar-start {
@@ -135,3 +131,4 @@ body {
   flex-direction: row;
   gap: 0.5rem;
 }
+

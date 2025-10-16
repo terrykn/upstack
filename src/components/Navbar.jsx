@@ -52,8 +52,8 @@ export default function Navbar({ theme, setTheme }) {
                     <ThemeSwitcher />
                     {!isSubdomain && (
                         <>
-                            <Button label="Manage Portfolio" onClick={() => navigate('/manage-portfolio')} />
-                            <Button label="Sign Out" onClick={() => signOut(navigate)} />
+                            <Button link label="Manage Portfolio" onClick={() => navigate('/manage-portfolio')} />
+                            <Button link label="Sign Out" onClick={() => signOut(navigate)} />
                         </>
                     )}
              </>
@@ -68,6 +68,7 @@ export default function Navbar({ theme, setTheme }) {
                             checked={theme === 'light'}
                             onChange={(e) => setTheme(e.value ? 'light' : 'dark')}
                         />
+                        <ThemeSwitcher />
                         <Button label="Sign In" onClick={() => navigate('/login')} />
                     </>
                 )

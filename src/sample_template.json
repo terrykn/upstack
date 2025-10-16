@@ -1,14 +1,14 @@
 {
-  "firstName": "Terry",
-  "lastName": "Nguyen",
+  "firstName": "Jake",
+  "lastName": "Peterson",
   "location": "New York City, New York",
-  "contactEmail": "terryknguyen@gmail.com",
+  "contactEmail": "jake@example.com",
   "contactPhone": "+1 (555) 123-4567",
   "currentRole": "Full Stack Engineer",
   "bio": "Hi, I'm a full stack engineer passionate about building scalable web apps and beautiful interfaces.",
   "links": [
-    { "platform": "GitHub", "url": "https://github.com/terrykn" },
-    { "platform": "LinkedIn", "url": "https://linkedin.com/in/terrykn" }
+    { "platform": "GitHub", "url": "https://github.com/jake" },
+    { "platform": "LinkedIn", "url": "https://linkedin.com/in/jake" }
   ],
   "pfp": "https://tse3.mm.bing.net/th/id/OIP.6Q5kNQE7h-lSpiiTFA_oRQHaHa?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
   "skills": [
@@ -75,8 +75,8 @@
     "skillsLayout": "chips",
     "contactsLayout": "icons",
     "showEmailForm": true,
-    "domain": "terry.upstack.cv",
-    "favicon": "https://cdn.upstack.cv/users/terry/favicon.ico",
+    "domain": "jake.upstack.cv",
+    "favicon": "",
     "footerLayout": "minimal"
   }
 }

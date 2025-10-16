@@ -75,7 +75,7 @@ export default function Home() {
         <div>
             <section id="home">
                 <div className="hero">
-                    <h1 className="hero-title">Deploy a Stunning Portfolio in Minutes</h1>
+                    <h1 className="hero-title">Deploy a <span style={{ fontStyle: "italic" }}>Stunning</span> Portfolio in Minutes</h1>
                     <span className="hero-subtitle">No code, no design stress, customized for you.</span>
                     <Button label="Start Free" size="large" rounded onClick={() => navigate('/login')} />
                 </div>

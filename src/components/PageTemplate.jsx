@@ -1,192 +1,107 @@
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import { Tag } from 'primereact/tag';
-import { ProjectsGallery, ProjectsCards } from './layouts/ProjectsLayout';
-import { ExperiencesTimeline, ExperiencesGallery, ExperiencesCards } from './layouts/ExperiencesLayout';
-import { SkillsChips, SkillsBars, SkillsGrid } from './layouts/SkillsLayout';
-import { ContactsIcons, ContactsList, ContactsCards } from './layouts/ContactsLayout';
-import { FooterMinimal, FooterDetailed, FooterCompact } from './layouts/FooterLayout';
+import React from "react";
+import { Card } from "primereact/card";
+import { Avatar } from "primereact/avatar";
+import { Tag } from "primereact/tag";
+import { Button } from "primereact/button";
 
 export default function PageTemplate({ data }) {
-  const layout = data.layout || {};
+  if (!data) return null;
 
-  // Layout component mappings
-  const projectsLayouts = {
-    gallery: ProjectsGallery,
-    cards: ProjectsCards,
-  };
-
-  const experiencesLayouts = {
-    timeline: ExperiencesTimeline,
-    gallery: ExperiencesGallery,
-    cards: ExperiencesCards,
-  };
-
-  const skillsLayouts = {
-    chips: SkillsChips,
-    bars: SkillsBars,
-    grid: SkillsGrid,
-  };
-
-  const contactsLayouts = {
-    icons: ContactsIcons,
-    list: ContactsList,
-    cards: ContactsCards,
-  };
-
-  const footerLayouts = {
-    minimal: FooterMinimal,
-    detailed: FooterDetailed,
-    compact: FooterCompact,
-  };
-
-  // Get components based on layout settings
-  const ProjectsComponent = projectsLayouts[layout.projectsLayout] || ProjectsGallery;
-  const ExperiencesComponent = experiencesLayouts[layout.experiencesLayout] || ExperiencesTimeline;
-  const SkillsComponent = skillsLayouts[layout.skillsLayout] || SkillsChips;
-  const ContactsComponent = contactsLayouts[layout.contactsLayout] || ContactsIcons;
-  const FooterComponent = footerLayouts[layout.footerLayout] || FooterMinimal;
+  const name = `${data.firstName || ""} ${data.lastName || ""}`.trim();
 
   return (
-    <div 
-      className="portfolio-template"
-      style={{
-        fontFamily: layout.fontFamily || 'system-ui',
-        fontSize: `${(layout.fontSizeScale || 1) * 16}px`,
-        backgroundColor: layout.backgroundColor || '#F9FAFB',
-      }}
-    >
-      {/* Header Section */}
-      <header className="portfolio-header">
-        <div className="container">
-          {data.pfp && (
-            <img 
-              src={data.pfp} 
-              alt={`${data.firstName} ${data.lastName}`}
-              className="portfolio-pfp"
-            />
-          )}
-          <h1 className="portfolio-name">
-            {data.firstName} {data.lastName}
-          </h1>
-          <p className="portfolio-role">{data.currentRole}</p>
-          <p className="portfolio-location">{data.location}</p>
-          {data.bio && (
-            <p className="portfolio-bio">{data.bio}</p>
+    <div className="container">
+      {/* Hero */}
+      <section id="hero" className="section hero">
+        {data.pfp ? (
+          <Avatar image={data.pfp} alt={`${name} profile`} shape="circle" size="xlarge" className="profile-img" />
+        ) : (
+          <Avatar label={name.split(" ")[0] || "U"} shape="circle" size="xlarge" className="profile-img" />
+        )}
+
+        <div>
+          <h1 className="text-3xl font-bold">{name}</h1>
+          {data.currentRole && <p className="text-lg">{data.currentRole}</p>}
+          {data.location && <p className="text-sm text-gray-500">{data.location}</p>}
+          <div className="mt-2">
+            {Array.isArray(data.links) && data.links.map((l, i) => (
+              <a key={i} href={l.url} target="_blank" rel="noopener noreferrer" className="inline-block mr-2">
+                <Tag value={l.platform} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About */}
+      <section id="about" className="section">
+        <h2 className="section-title">About</h2>
+        <div className="section-content">
+          <Card>
+            <p>{data.bio || "No bio available."}</p>
+            {data.resume && (
+              <div className="mt-4">
+                <Button label="View Resume" icon="pi pi-file" onClick={() => window.open(data.resume, "_blank")} />
+              </div>
+            )}
+          </Card>
+        </div>
+      </section>
+
+      {/* Projects */}
+      <section id="projects" className="section">
+        <h2 className="section-title">Projects</h2>
+        <div className="section-content">
+          {Array.isArray(data.projects) && data.projects.length > 0 ? (
+            data.projects.map((p, i) => (
+              <Card key={i} title={p.title} subTitle={p.link} className="mb-3">
+                {p.description && <p>{p.description}</p>}
+                {p.link && (
+                  <Button className="mt-2" label="Open" icon="pi pi-external-link" onClick={() => window.open(p.link, "_blank")} />
+                )}
+              </Card>
+            ))
+          ) : (
+            <p className="text-gray-500">No projects listed.</p>
           )}
         </div>
-      </header>
+      </section>
 
-      {/* Main Content */}
-      <main className="portfolio-main container">
-        
-        {/* Skills Section */}
-        {data.skills && data.skills.length > 0 && (
-          <section className="portfolio-section">
-            <h2 className="section-title" style={{ color: layout.primaryColor }}>
-              Skills
-            </h2>
-            <SkillsComponent skills={data.skills} />
-          </section>
-        )}
+      {/* Experience */}
+      <section id="experience" className="section">
+        <h2 className="section-title">Experience</h2>
+        <div className="section-content">
+          {Array.isArray(data.experiences) && data.experiences.length > 0 ? (
+            data.experiences.map((exp, i) => (
+              <Card key={i} className="mb-3">
+                <h3 className="font-semibold">{exp.position} <span className="text-sm text-gray-600">@ {exp.companyName}</span></h3>
+                <div className="text-sm text-gray-600">{exp.startDate} - {exp.endDate || "Present"}</div>
+                {exp.description && <p className="mt-2">{exp.description}</p>}
+              </Card>
+            ))
+          ) : (
+            <p className="text-gray-500">No experience listed.</p>
+          )}
+        </div>
+      </section>
 
-        {/* Experience Section */}
-        {data.experiences && data.experiences.length > 0 && (
-          <section className="portfolio-section">
-            <h2 className="section-title" style={{ color: layout.primaryColor }}>
-              Experience
-            </h2>
-            <ExperiencesComponent experiences={data.experiences} />
-          </section>
-        )}
-
-        {/* Education Section */}
-        {data.education && data.education.length > 0 && (
-          <section className="portfolio-section">
-            <h2 className="section-title" style={{ color: layout.primaryColor }}>
-              Education
-            </h2>
-            <div className="education-cards">
-              {data.education.map((edu, idx) => (
-                <Card key={idx} className="education-card">
-                  <div className="education-header">
-                    <div>
-                      <h3>{edu.schoolName}</h3>
-                      <p className="education-location">{edu.location}</p>
-                    </div>
-                    <span className="education-dates">
-                      {new Date(edu.startDate).getFullYear()} - {new Date(edu.endDate).getFullYear()}
-                    </span>
-                  </div>
-                  
-                  {edu.majors && (
-                    <p className="education-field">
-                      <strong>Major(s):</strong> {edu.majors.join(', ')}
-                    </p>
-                  )}
-                  
-                  {edu.minors && edu.minors.length > 0 && (
-                    <p className="education-field">
-                      <strong>Minor(s):</strong> {edu.minors.join(', ')}
-                    </p>
-                  )}
-                  
-                  {edu.gpa && (
-                    <p className="education-field">
-                      <strong>GPA:</strong> {edu.gpa}
-                    </p>
-                  )}
-                  
-                  {edu.awards && edu.awards.length > 0 && (
-                    <div className="education-awards">
-                      <h4>Awards:</h4>
-                      <ul>
-                        {edu.awards.map((award, i) => (
-                          <li key={i}>{award}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Projects Section (if you have projects data) */}
-        {data.projects && data.projects.length > 0 && (
-          <section className="portfolio-section">
-            <h2 className="section-title" style={{ color: layout.primaryColor }}>
-              Projects
-            </h2>
-            <ProjectsComponent projects={data.projects} />
-          </section>
-        )}
-
-        {/* Contact Section */}
-        <section className="portfolio-section">
-          <h2 className="section-title" style={{ color: layout.primaryColor }}>
-            Contact
-          </h2>
-          <ContactsComponent user={data} />
-        </section>
-
-        {/* Resume Download */}
-        {data.resume && (
-          <section className="portfolio-section resume-section">
-            <Button 
-              label="Download Resume"
-              icon="pi pi-download"
-              className="p-button-raised"
-              style={{ backgroundColor: layout.primaryColor }}
-              onClick={() => window.open(data.resume, '_blank')}
-            />
-          </section>
-        )}
-      </main>
-
-      {/* Footer */}
-      <FooterComponent user={data} />
+      {/* Education */}
+      <section id="education" className="section">
+        <h2 className="section-title">Education</h2>
+        <div className="section-content">
+          {Array.isArray(data.education) && data.education.length > 0 ? (
+            data.education.map((edu, i) => (
+              <Card key={i} className="mb-3">
+                <h3 className="font-semibold">{edu.schoolName}</h3>
+                <div className="text-sm text-gray-600">{edu.startDate} - {edu.endDate}</div>
+                {edu.degree && <div className="mt-2">{edu.degree}</div>}
+              </Card>
+            ))
+          ) : (
+            <p className="text-gray-500">No education listed.</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

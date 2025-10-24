@@ -16,25 +16,30 @@ export default function ArrayField({ label, arrayData, setArrayData, fields }) {
   };
 
   return (
-    <div>
-      <label>{label}</label>
-      {items.length > 0 ? (
-        items.map((item, i) => (
-          <div key={i}>
-            {fields.map((f, idx) => (
-              <InputText
-                key={idx}
-                placeholder={f}
-                value={item[f] ?? ""}
-                onChange={(e) => updateItem(i, f, e.target.value)}
-                className="flex-1"
-              />
-            ))}
-          </div>
-        ))
-      ) : (
-        <div>No {label.toLowerCase()} yet.</div>
-      )}
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+      <div>
+        <label>{label}</label>
+      </div>
+      <div>
+        {items.length > 0 ? (
+          items.map((item, i) => (
+            <div key={i} style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+              {fields.map((f, idx) => (
+                <InputText
+                  key={idx}
+                  placeholder={f}
+                  value={item[f] ?? ""}
+                  onChange={(e) => updateItem(i, f, e.target.value)}
+                  className="flex-1"
+                />
+              ))}
+            </div>
+          ))
+        ) : (
+          <div>No {label.toLowerCase()} yet.</div>
+        )}        
+      </div>
+
       <Button label={`Add ${label}`} onClick={addItem} />
     </div>
   );

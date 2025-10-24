@@ -4,8 +4,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 export default function TextField({ label, value, onChange, textarea = false, helperText }) {
   return (
-    <div className="mb-3">
-      <label className="block capitalize">{label.replace(/([A-Z])/g, " $1")}</label>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+      <label>{label.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}</label>
       {textarea ? (
         <InputTextarea value={value} onChange={(e) => onChange(e.target.value)} rows={4} className="w-full" />
       ) : (

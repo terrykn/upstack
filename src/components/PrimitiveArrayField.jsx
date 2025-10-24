@@ -13,10 +13,10 @@ export default function PrimitiveArrayField({ label, arrayData, setArrayData }) 
   const removeItem = (index) => setArrayData(items.filter((_, i) => i !== index));
 
   return (
-    <div className="mb-3">
-      <label className="block">{label}</label>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+      <label>{label}</label>
       {items.map((it, i) => (
-        <div key={i} className="flex gap-2 mb-2 items-center">
+        <div key={i} style={{ display: "flex", flexDirection: "row", gap: "0.3rem" }} >
           <InputText value={it} onChange={(e) => updateItem(i, e.target.value)} className="flex-1" />
           <Button icon="pi pi-trash" className="p-button-danger" onClick={() => removeItem(i)} />
         </div>

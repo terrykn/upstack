@@ -39,38 +39,27 @@ export default function Navbar({ theme, setTheme }) {
 
     const end = (
         <>
+            {/* Always show theme */}
+            <ToggleButton
+                onLabel=""
+                offLabel=""
+                onIcon="pi pi-sun"
+                offIcon="pi pi-moon"
+                checked={theme === 'light'}
+                onChange={(e) => setTheme(e.value ? 'light' : 'dark')}
+            />
+            <ThemeSwitcher />
+
             {user ? (
-             <>
-                    <ToggleButton
-                        onLabel=""
-                        offLabel=""
-                        onIcon="pi pi-sun"
-                        offIcon="pi pi-moon"
-                        checked={theme === 'light'}
-                        onChange={(e) => setTheme(e.value ? 'light' : 'dark')}
-                    />
-                    <ThemeSwitcher />
-                    {!isSubdomain && (
-                        <>
-                            <Button link label="Manage Portfolio" onClick={() => navigate('/manage-portfolio')} />
-                            <Button link label="Sign Out" onClick={() => signOut(navigate)} />
-                        </>
-                    )}
-             </>
-            ) : (
                 !isSubdomain && (
                     <>
-                        <ToggleButton
-                            onLabel=""
-                            offLabel=""
-                            onIcon="pi pi-sun"
-                            offIcon="pi pi-moon"
-                            checked={theme === 'light'}
-                            onChange={(e) => setTheme(e.value ? 'light' : 'dark')}
-                        />
-                        <ThemeSwitcher />
-                        <Button label="Sign In" onClick={() => navigate('/login')} />
+                        <Button link label="Manage Portfolio" onClick={() => navigate('/manage-portfolio')} />
+                        <Button link label="Sign Out" onClick={() => signOut(navigate)} />
                     </>
+                )
+            ) : (
+                !isSubdomain && (
+                    <Button label="Sign In" onClick={() => navigate('/login')} />
                 )
             )}
         </>

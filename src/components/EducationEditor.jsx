@@ -15,26 +15,25 @@ export default function EducationEditor({ data = [], setData }) {
   const remove = (index) => setData(items.filter((_, i) => i !== index));
 
   return (
-    <div className="mb-3">
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
       <label className="block">Education</label>
       {items.map((edu, i) => (
-        <div key={i} className="mb-4 p-3 border rounded">
-          <div className="flex justify-between items-center mb-2">
+        <div key={i} style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <strong>{edu.schoolName || `School ${i + 1}`}</strong>
             <Button icon="pi pi-trash" className="p-button-danger p-button-sm" onClick={() => remove(i)} />
           </div>
-          <TextField label="schoolName" value={edu.schoolName} onChange={(v) => update(i, "schoolName", v)} />
-          <TextField label="location" value={edu.location} onChange={(v) => update(i, "location", v)} />
-          <TextField label="startDate" value={edu.startDate} onChange={(v) => update(i, "startDate", v)} />
-          <TextField label="endDate" value={edu.endDate} onChange={(v) => update(i, "endDate", v)} />
-          <PrimitiveArrayField label="majors" arrayData={edu.majors} setArrayData={(val) => update(i, "majors", val)} />
-          <PrimitiveArrayField label="minors" arrayData={edu.minors} setArrayData={(val) => update(i, "minors", val)} />
-          <TextField label="gpa" value={edu.gpa} onChange={(v) => update(i, "gpa", v)} />
-          <TextField label="rank" value={edu.rank} onChange={(v) => update(i, "rank", v)} />
-          <PrimitiveArrayField label="relevantCourses" arrayData={edu.relevantCourses} setArrayData={(val) => update(i, "relevantCourses", val)} />
-          <PrimitiveArrayField label="awards" arrayData={edu.awards} setArrayData={(val) => update(i, "awards", val)} />
-          <TextField label="info" value={edu.info} onChange={(v) => update(i, "info", v)} textarea />
-          <ArrayField label="media" arrayData={edu.media} setArrayData={(val) => update(i, "media", val)} fields={["type", "url"]} />
+          <TextField label="School" value={edu.schoolName} onChange={(v) => update(i, "schoolName", v)} />
+          <TextField label="Location" value={edu.location} onChange={(v) => update(i, "location", v)} />
+          <TextField label="Start Date" value={edu.startDate} onChange={(v) => update(i, "startDate", v)} />
+          <TextField label="End Date" value={edu.endDate} onChange={(v) => update(i, "endDate", v)} />
+          <PrimitiveArrayField label="Major(s)" arrayData={edu.majors} setArrayData={(val) => update(i, "majors", val)} />
+          <PrimitiveArrayField label="Minor(s)" arrayData={edu.minors} setArrayData={(val) => update(i, "minors", val)} />
+          <TextField label="GPA" value={edu.gpa} onChange={(v) => update(i, "gpa", v)} />
+          <PrimitiveArrayField label="Relevant Courses" arrayData={edu.relevantCourses} setArrayData={(val) => update(i, "relevantCourses", val)} />
+          <PrimitiveArrayField label="Awards" arrayData={edu.awards} setArrayData={(val) => update(i, "awards", val)} />
+          <TextField label="Additional Info" value={edu.info} onChange={(v) => update(i, "info", v)} textarea />
+          <ArrayField label="Media" arrayData={edu.media} setArrayData={(val) => update(i, "media", val)} fields={["type", "url"]} />
         </div>
       ))}
       <Button label="Add Education" onClick={add} />
